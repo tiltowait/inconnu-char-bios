@@ -1,6 +1,8 @@
 """Present a basic webpage showing character info."""
 
+import json
 import os
+from typing import Dict
 
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
@@ -25,6 +27,14 @@ async def home():
         return html.read()
 
 
+@app.get("/offline", response_class=HTMLResponse)
+async def offline_page():
+    """Generate an offline test page."""
+    with open("sample.json", "r", encoding="utf-8") as file:
+        bio = json.load(file)
+        return prepare_html(bio)
+
+
 @app.get("/{charid}", response_class=HTMLResponse)
 async def display_character_bio(charid: str):
     """Display character biography detail."""
@@ -39,10 +49,15 @@ async def display_character_bio(charid: str):
         raise HTTPException(404, detail="Character not found.")
 
     # Got the character; return the HTML
-    name = bio["name"]
-    biography = bio["biography"] or "Not set."
-    description = bio["description"] or "Not set."
-    image = bio["image"]
+    return prepare_html(bio)
+
+
+def prepare_html(json: Dict[str, str]) -> str:
+    """Prep the character HTML page."""
+    name = json["name"]
+    biography = json["biography"] or "Not set."
+    description = json["description"] or "Not set."
+    image = json["image"]
 
     with open("character.html", "r", encoding="utf-8") as html_file:
         html = html_file.read()
