@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 
 load_dotenv()
@@ -18,6 +19,7 @@ db = client.inconnu
 characters = db.characters
 
 app = FastAPI()
+app.mount("/favicon", StaticFiles(directory="favicon"), name="favicon")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -27,7 +29,7 @@ async def home():
         return html.read()
 
 
-@app.get("/offline", response_class=HTMLResponse)
+@app.get("/test", response_class=HTMLResponse)
 async def offline_page():
     """Generate an offline test page."""
     with open("sample.json", "r", encoding="utf-8") as file:
@@ -35,7 +37,7 @@ async def offline_page():
         return prepare_html(bio)
 
 
-@app.get("/{charid}", response_class=HTMLResponse)
+@app.get("/profile/{charid}", response_class=HTMLResponse)
 async def display_character_bio(charid: str):
     """Display character biography detail."""
     if not ObjectId.is_valid(charid):
@@ -55,10 +57,22 @@ async def display_character_bio(charid: str):
 def prepare_html(json: Dict[str, str]) -> str:
     """Prep the character HTML page."""
     name = json["name"]
-    biography = json.get("biography") or "Not set."
-    description = json.get("description") or "Not set."
-    image = json.get("image", "")
+    biography = json.get("biography") or gen_not_set()
+    description = json.get("description") or gen_not_set()
+    image = gen_img(json.get("image"), name)
 
-    with open("character.html", "r", encoding="utf-8") as html_file:
+    with open("profile.html", "r", encoding="utf-8") as html_file:
         html = html_file.read()
         return html.format(name=name, biography=biography, description=description, image=image)
+
+
+def gen_not_set() -> str:
+    """Generate a styled "Not set" text."""
+    return '<em class="text-muted">Not set.</em>'
+
+
+def gen_img(image: str, name: str) -> str:
+    """Generate the img tag or specify unset."""
+    if image:
+        return f'<img src="{image}" alt="{name}" class="rounded img-fluid">'
+    return '<p class="text-muted text-center"><em>No image set.</em></p>'
