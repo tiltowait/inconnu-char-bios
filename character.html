@@ -10,21 +10,45 @@
 </head>
 
 <body>
+	<nav class="navbar">
+		<div class="container">
+			<a class="navbar-brand link-danger" href="https://www.inconnu.app" title="Inconnu Dice Bot">
+				<h1>
+					<img class="d-inline-block align-text-middle" width="64" height="64" src="https://www.inconnu.app/images/inconnu_logo.png">
+					Inconnu
+					<small class="h3 text-muted" style="padding-left:0.5em">Character Profile</small>
+				</h1>
+			</a>
+		</div>
+	</nav>
 	<div class="container" style="padding-top:1em;padding-bottom:1em">
-		<h1>{name}</h1>
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-body">
+						<h1 style="padding-bottom: 0.35em">{name}</h1>
 						<h5 class="card-title">Biography</h5>
-						<p>{biography}</p>
+						<p class="card-text">{biography}</p>
 						<h5 class="card-title">Description</h5>
-						<p>{description}</p>
+						<p class="card-text">{description}</p>
+					</div>
+					<div class="card-footer text-muted">
+						<em>
+							All content on this page is player-generated. Any views or material presented are solely the product of the player. Players are responsible for their own image hosting.
+						</em>
 					</div>
 				</div>
 			</div>
 			<div class="col">
 				<img src="{image}" alt="{name}" class="rounded img-fluid">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-center text-muted">
+				<hr>
+				<strong>Inconnu</strong> is copyright &copy;2022 by tiltowait. All rights reserved.<br>
+				View the bot's source code <a href="https://github.com/tiltowait/inconnu" title="Inconnu source code">here</a> or this page's source code <a href="https://github.com/tiltowait/inconnu-char-bios" title="Character profile source code">here</a>.<br>
+				Want to support me? Jon the <a href="https://www.patreon.com/tiltowait" title="Patreon">Patreon</a>!
 			</div>
 		</div>
 	</div>
