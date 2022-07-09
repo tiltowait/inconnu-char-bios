@@ -55,9 +55,9 @@ async def display_character_bio(charid: str):
 def prepare_html(json: Dict[str, str]) -> str:
     """Prep the character HTML page."""
     name = json["name"]
-    biography = json["biography"] or "Not set."
-    description = json["description"] or "Not set."
-    image = json["image"]
+    biography = json.get("biography") or "Not set."
+    description = json.get("description") or "Not set."
+    image = json.get("image", "")
 
     with open("character.html", "r", encoding="utf-8") as html_file:
         html = html_file.read()
